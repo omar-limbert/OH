@@ -23,8 +23,10 @@ Vagrant.configure("2") do |config|
       os.server_name = ENV['OS_VM_NAME']
       os.flavor = ENV['OS_FLAVOR'] 
       override.vm.synced_folder '.', '/vagrant', disabled: true
-      end 
+      end
+
   end
+
   config.vm.provision "docker"
   config.vm.provision "docker_compose", compose_version: "1.21.2"
   
