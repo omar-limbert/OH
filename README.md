@@ -1,1 +1,3 @@
-# OH
+# DEVOPS Practice
+## REQUIREMENTS
+- Gradle
