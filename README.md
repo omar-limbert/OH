@@ -2,7 +2,11 @@
 
 ## Requirements
 
+- Open Stack Server
 - Vagrant 1.7.4 or higher installed
+    - Plugin: vagrant-docker-compose
+    - Plugin: vagrant-openstack-provider
+    - Plugin: vagrant-env
 
 You could find information in following link:
 - https://www.vagrantup.com/docs/installation
