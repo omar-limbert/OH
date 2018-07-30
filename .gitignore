@@ -1,3 +1,11 @@
 .DS_store
 /.vagrant/
-/.idea/
+/.idea/*/
+**/.idea/*/
+**/.gradle/*/
+**/out/*/
+*.xml
+*.iml
+*.MF
+**/resources/*/
+**/build/*/
