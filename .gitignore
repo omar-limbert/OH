@@ -3,6 +3,7 @@
 /.idea/*/
 **/.idea/*/
 **/.gradle/*/
+**/reports/*/
 **/out/*/
 *.xml
 *.iml

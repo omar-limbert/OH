@@ -30,4 +30,10 @@
     
     Replace "4.9" to your version as needed
 
+## To generate reports with Jacoco plugin execute command on Unix base systems:
 
+    - $ ./gradlew test jacocoTestReport
+
+## To generate reports with Jacoco plugin execute command on Windows systems:
+
+    - $ gradlew.bat test jacocoTestReport
