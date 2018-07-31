@@ -1,3 +1,3 @@
-# DEVOPS Practice
-## REQUIREMENTS
-- Gradle
+# DEVOPS
+
+## Repository to practice and apply DevOps.
