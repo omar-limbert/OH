@@ -14,6 +14,8 @@ pipeline {
             steps {
                 echo 'Testing..'
 		sh './gradle/quickstart/gradlew clean test -p gradle/quickstart/'
+		sh './gradle/quickstart/gradlew test jacocoTestReport -p gradle/quickstart/'
+ 		junit '**/build/*.xml'
             }
         }
         stage('Deploy') {
