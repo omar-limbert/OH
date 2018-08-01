@@ -7,15 +7,14 @@ pipeline {
                 echo 'Building..'
 		sh 'chmod +x gradle/quickstart/gradlew'
 		sh './gradle/quickstart/gradlew clean assemble -p gradle/quickstart/'
-                archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true 
+                archiveArtifacts artifacts: '.jar', fingerprint: true, onlyIfSuccessful: true
             }
         }
         stage('Test') {
             steps {
                 echo 'Testing..'
 		sh './gradle/quickstart/gradlew clean test -p gradle/quickstart/'
-		junit '**/target/*.xml'
- 		junit '**/target/*.html'
+		junit 'test.xml'
             }
         }
         stage('Deploy') {
