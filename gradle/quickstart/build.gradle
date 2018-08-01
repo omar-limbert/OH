@@ -1,6 +1,8 @@
 apply plugin: 'java'
+apply plugin: 'jacoco'
 
 version = '1.0'
+
 jar {
     manifest {
         attributes 'Implementation-Title': 'Gradle Quickstart',
@@ -22,5 +24,14 @@ uploadArchives {
         flatDir {
             dirs 'repos'
         }
+    }
+}
+
+jacocoTestReport {
+    group = "Reporting"
+    reports {
+        xml.enabled true
+        csv.enabled false
+        html.destination file("${buildDir}/reports/coverage")
     }
 }
