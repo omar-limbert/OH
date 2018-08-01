@@ -7,6 +7,8 @@ pipeline {
                 echo 'Building..'
 		sh 'chmod +x gradle/quickstart/gradlew'
 		sh './gradle/quickstart/gradlew clean assemble -p gradle/quickstart/'
+ 		sh 'make' 
+                archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true 
             }
         }
         stage('Test') {
