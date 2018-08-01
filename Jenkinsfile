@@ -29,7 +29,7 @@ pipeline {
 		publishHTML([allowMissing: true,
                        alwaysLinkToLastBuild: false,
                        keepAll: true,
-                       'gradle/quickstart/build/reports/coverage/',
+                       reportDir: 'gradle/quickstart/build/reports/coverage/',
                        reportFiles: 'index.html',
                        reportTitles: "SimpleCov Report",
                        reportName: 'Jacoco Coverage Reports'])
