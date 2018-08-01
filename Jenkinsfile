@@ -5,8 +5,8 @@ pipeline {
         stage('Build') {
             steps {
 		sh 'chmod +x gradle/quickstart/gradlew'
-		sh ./gradle/quickstart/gradlew clean assemble -p gradle/quickstart/'
-		sh ./gradle/quickstart/gradlew uploadArchives'
+		sh './gradle/quickstart/gradlew clean assemble -p gradle/quickstart/'
+		sh './gradle/quickstart/gradlew uploadArchives -p gradle/quickstart/'
                 archiveArtifacts artifacts: '.jar', fingerprint: true, onlyIfSuccessful: true
             }
         }
