@@ -7,7 +7,6 @@ pipeline {
                 echo 'Building..'
 		sh 'chmod +x gradle/quickstart/gradlew'
 		sh './gradle/quickstart/gradlew clean assemble -p gradle/quickstart/'
- 		sh 'make' 
                 archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true 
             }
         }
@@ -15,7 +14,6 @@ pipeline {
             steps {
                 echo 'Testing..'
 		sh './gradle/quickstart/gradlew clean test -p gradle/quickstart/'
- 		sh 'make check || true'
 		junit '**/target/*.xml'
  		junit '**/target/*.html'
             }
@@ -28,9 +26,6 @@ pipeline {
               		expression {
                 		currentBuild.result == null || currentBuild.result == 'SUCCESS' 
                 	}
-            	}
-            	steps {
-               	 sh 'make publish'
             	}
             }
         }
