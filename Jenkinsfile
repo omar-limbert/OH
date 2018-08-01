@@ -7,14 +7,12 @@ pipeline {
 		sh 'chmod +x gradle/quickstart/gradlew'
 		sh './gradle/quickstart/gradlew clean assemble -p gradle/quickstart/'
 		sh './gradle/quickstart/gradlew uploadArchives -p gradle/quickstart/'
-                archiveArtifacts artifacts: '**/repos/*.jar', fingerprint: true, onlyIfSuccessful: true
             }
         }
         stage('Test') {
             steps {
                 echo 'Testing..'
-		sh './gradle/quickstart/gradlew clean test -p gradle/quickstart/'
- 		junit 'gradle/quickstart/build/test-results/test/*.xml'
+		sh './gradle/quickstart/gradlew clean test jacocoTestReport -p gradle/quickstart/'
             }
         }
         stage('Deploy') {
@@ -32,7 +30,7 @@ pipeline {
             		allowMissing: false,
             		alwaysLinkToLastBuild: false,
             		keepAll: true,
-            		reportDir: 'gradle/quickstart/build/reports/tests/test/'
+            		reportDir: 'gradle/quickstart/build/reports/coverage/'
             		reportFiles: 'index.html',
             		reportName: 'RCov Report'
           		]
