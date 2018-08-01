@@ -34,7 +34,7 @@ pipeline {
                        reportTitles: "SimpleCov Report",
                        reportName: 'Jacoco Coverage Reports'])
 
-      		}
-         }
+      		
+        }
     }
 }
