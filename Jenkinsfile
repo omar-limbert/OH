@@ -28,7 +28,15 @@ pipeline {
        always {
                 archiveArtifacts artifacts: '**/repos/*.jar', fingerprint: true, onlyIfSuccessful: true
 		junit 'gradle/quickstart/build/test-results/test/*.xml'
-		publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'gradle/quickstart/build/reports/tests/test/', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: 'Report'])
+		publishHTML target: [
+            		allowMissing: false,
+            		alwaysLinkToLastBuild: false,
+            		keepAll: true,
+            		reportDir: 'gradle/quickstart/build/reports/tests/test/'
+            		reportFiles: 'index.html',
+            		reportName: 'RCov Report'
+          		]
+      		}
          }
     }
 }
