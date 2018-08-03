@@ -1,0 +1,58 @@
+format_version: 3
+pipelines:
+  quickstart-yaml-deploy:
+    lock_behavior: lockOnFailure
+    group: JavaAPP
+    materials:
+      repo: 
+       git: https://github.com/devops-at06/OH.git
+       branch: master
+    stages: 
+      - Build:
+          jobs:
+            Building: 
+              tasks:
+                - exec:
+                    command: ./gradle/quickstart/gradlew
+                    arguments:
+                      - "clean"
+                      - "assemble"
+                      - "-p"
+                      - "gradle/quickstart"
+              artifacts:
+                - build:
+                    source: gradle/quickstart/build/libs/*.jar
+                    destination: war
+      - Publish:
+          jobs:
+            Publishing: 
+              tasks:
+                - exec:
+                    command: ./gradle/quickstart/gradlew
+                    arguments:
+                      - clean
+                      - test
+                      - -p
+                      - gradle/quickstart
+                - exec:
+                    command: ./gradle/quickstart/gradlew
+                    arguments:
+                      - clean
+                      - test
+                      - jacocoTestReport
+                      - -p
+                      - gradle/quickstart/
+              artifacts:
+                - build:
+                    source: gradle/quickstart/build/reports/coverage/*
+                    destination: html_coverage
+                - build:
+                    source: gradle/quickstart/build/reports/tests/test/*
+                    destination: html_report
+                - test:
+                    source: gradle/quickstart/build/test-results/test/*xml
+                    destination: xml
+              tabs:
+                Cod_Coverage: html_coverage/index.html
+                Xml_Test_Result: xml/*.xml
+                Test_Summary: html_report/index.html
