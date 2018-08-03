@@ -5,7 +5,6 @@
 **/.gradle/*/
 **/reports/*/
 **/out/*/
-*.xml
 *.iml
 *.MF
 **/resources/*/
