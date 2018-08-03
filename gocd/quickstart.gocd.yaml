@@ -54,5 +54,5 @@ pipelines:
                     destination: xml
               tabs:
                 Cod_Coverage: html_coverage/index.html
-                Xml_Test_Result: xml/*.xml
+                Xml_Test_Result: xml/TEST-org.gradle.PersonTest.xml
                 Test_Summary: html_report/index.html
