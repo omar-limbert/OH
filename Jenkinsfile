@@ -15,7 +15,7 @@ pipeline {
         }
         stage('Code Quality') {
             steps {
-                sh './gradle/quickstart/gradlew sonarqube -D sonar.host.url=http://localhost:9000 -p gradle/quickstart/'
+                sh './gradle/quickstart/gradlew sonarqube -Dsonar.host.url=http://127.0.0.1:9000 -p gradle/quickstart/'
             }
         }
         stage('Publish') {

@@ -39,8 +39,7 @@ pipelines:
                     command: ./gradle/quickstart/gradlew
                     arguments:
                       - sonarqube
-                      - -D
-                      - sonar.host.url=http://localhost:9000
+                      - -Dsonar.host.url=http://127.0.0.1:9000
                       - -p
                       - gradle/quickstart/
       - Publish:
