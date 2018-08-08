@@ -1,0 +1,33 @@
+version: '3'
+services:
+  jenkins_server:
+   image: "registry.fundacion-jala.local/devops/jenkins/jenkins:2.107.3"
+   restart: always
+   ports:
+    - "8080:8080"
+    - "5000:5000"
+   volumes:
+    - /home/ubuntu/jenkins:/var/jenkins_home
+  gocd_server:
+    image: "registry.fundacion-jala.local/devops/gocd/gocd-server:v18.5.0"
+    restart: always
+    ports:
+      - "8153:8153"
+      - "8154:8154"
+    volumes:
+      - /home/ubuntu/godata_server:/godata
+      - /home/ubuntu/go_server:/home/go
+  gocd_agent:
+    image: "registry.fundacion-jala.local/devops/gocd/gocd-agent-alpine-3.7:v18.5.0"
+    restart: always
+    environment:
+      - GO_SERVER_URL=https://gocd_server:8154/go
+    volumes:
+      - /home/ubuntu/godata_agent:/godata
+      - /home/ubuntu/go_agent:/home/go
+  sonarqube:
+    image: "registry.fundacion-jala.local/devops/sonarqube:6.7.4-alpine"
+    restart: always
+    ports:
+      - "9000:9000"
+      - "9092:9092"

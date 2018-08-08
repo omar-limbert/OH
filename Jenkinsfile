@@ -2,18 +2,26 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage('Compile') {
             steps {
                 sh 'chmod +x gradle/quickstart/gradlew'
                 sh './gradle/quickstart/gradlew clean assemble -p gradle/quickstart/'
             }
         }
+        stage('Test') {
+            steps {
+                sh './gradle/quickstart/gradlew clean test jacocoTestReport -p gradle/quickstart/'
+            }
+        }
+        stage('Code Quality') {
+            steps {
+                sh './gradle/quickstart/gradlew sonarqube -Dsonar.host.url=http://127.0.0.1:9000 -p gradle/quickstart/'
+            }
+        }
         stage('Publish') {
             steps {
-                echo 'Publishing Artifact....'
-		        sh './gradle/quickstart/gradlew uploadArchives -p gradle/quickstart/'
-		        echo 'Publishing Reports....'
-		        sh './gradle/quickstart/gradlew clean test jacocoTestReport -p gradle/quickstart/'
+                sh './gradle/quickstart/gradlew uploadArchives -p gradle/quickstart/'
+                
             }
         }
     }

@@ -8,9 +8,9 @@ pipelines:
        git: https://github.com/devops-at06/OH.git
        branch: master
     stages: 
-      - Build:
+      - Compile:
           jobs:
-            Building: 
+            assemble: 
               tasks:
                 - exec:
                     command: ./gradle/quickstart/gradlew
@@ -19,24 +19,9 @@ pipelines:
                       - "assemble"
                       - "-p"
                       - "gradle/quickstart"
-              artifacts:
-                - build:
-                    source: gradle/quickstart/build/libs/*.jar
-                    destination: war
       - Test:
           jobs:
-            Testing: 
-              tasks:
-                - exec:
-                    command: ./gradle/quickstart/gradlew
-                    arguments:
-                      - clean
-                      - test
-                      - -p
-                      - gradle/quickstart/
-      - Publish:
-          jobs:
-            Publishing: 
+            testing: 
               tasks:
                 - exec:
                     command: ./gradle/quickstart/gradlew
@@ -46,7 +31,31 @@ pipelines:
                       - jacocoTestReport
                       - -p
                       - gradle/quickstart/
+      - CodeQuality:
+          jobs:
+            sonarqube: 
+              tasks:
+                - exec:
+                    command: ./gradle/quickstart/gradlew
+                    arguments:
+                      - sonarqube
+                      - -Dsonar.host.url=http://127.0.0.1:9000
+                      - -p
+                      - gradle/quickstart/
+      - Publish:
+          jobs:
+            publishing: 
+              tasks:
+                - exec:
+                    command: ./gradle/quickstart/gradlew
+                    arguments:
+                      - uploadArchives
+                      - -p
+                      - gradle/quickstart/
               artifacts:
+                - build:
+                    source: gradle/quickstart/repos/*.jar
+                    destination: war
                 - test:
                     source: gradle/quickstart/build/test-results/test/*xml
                     destination: xml
