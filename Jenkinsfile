@@ -15,13 +15,13 @@ pipeline {
         }
         stage('Code Quality') {
             steps {
-                sh './gradle/quickstart/gradlew sonarqube -p gradle/quickstart/'
+                sh './gradle/quickstart/gradlew sonarqube -D sonar.host.url=http://localhost:9000 -p gradle/quickstart/'
             }
         }
         stage('Publish') {
             steps {
-		            sh './gradle/quickstart/gradlew uploadArchives -p gradle/quickstart/'
-		        
+                sh './gradle/quickstart/gradlew uploadArchives -p gradle/quickstart/'
+                
             }
         }
     }

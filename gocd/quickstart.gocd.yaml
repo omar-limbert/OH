@@ -31,6 +31,18 @@ pipelines:
                       - jacocoTestReport
                       - -p
                       - gradle/quickstart/
+      - CodeQuality:
+          jobs:
+            sonarqube: 
+              tasks:
+                - exec:
+                    command: ./gradle/quickstart/gradlew
+                    arguments:
+                      - sonarqube
+                      - -D
+                      - sonar.host.url=http://localhost:9000
+                      - -p
+                      - gradle/quickstart/
       - Publish:
           jobs:
             publishing: 
