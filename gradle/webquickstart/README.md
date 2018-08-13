@@ -16,14 +16,6 @@
 ## To execute Gradle wrapper use on Windows systems:
     - $ gradlew clean build --console verbose
 
-## Open deploy.gradle and set:
-
-    host = 'YOUR_VM_HOST'
-    user = 'YOUR_VM_USER'
-    identity = file('YOUR_KEY_PATH')
-
-    put from: 'YOUR_WAR_PATH', into: '/opt/tomcat/webapps/'
-
 ## Connect to your VM via SSH:
 
     ssh ubuntu@YOUR_VM_HOST -i YOUR_KEY_PATH
@@ -32,9 +24,9 @@
 
 ## To run deploying file and send .war to VM on Unix base system:
 
-    - $ ./gradlew -b deploy.gradle deploy
+    - $ ./gradlew -b deploy.gradle deploy -Dhost.ip=YOUR_HOST -Dhost.user=YOUR_USER_HOST -Dkey.path=YOUR_KEY_PATH
 ## To run deploying file and send .war to VM on Windows systems:
 
-    - $ ./gradlew -b deploy.gradle deploy
+    - $ gradlew  -b deploy.gradle deploy -Dhost.ip=YOUR_HOST -Dhost.user=YOUR_USER_HOST -Dkey.path=YOUR_KEY_PATH
 
 ## Open your browers on http://YOUR_HOST/quickstart and it is running..!

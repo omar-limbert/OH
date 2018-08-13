@@ -4,9 +4,9 @@ plugins {
 
 remotes {
   webServer {
-    host = '10.28.135.233'
-    user = 'ubuntu'
-    identity = file('C:\\Users\\Administrator\\Desktop\\omy.pem')
+    host = System.properties['host.ip']
+    user = System.properties['host.user']
+    identity = file(System.properties['key.path'])
   }
 }
 
@@ -14,7 +14,7 @@ task deploy {
   doLast {
     ssh.run {
       session(remotes.webServer) {
-        put from: 'C:\\Users\\Administrator\\Documents\\webquickstart\\build\\libs\\quickstart.war', into: '/opt/tomcat/webapps/'
+        put from: 'build/libs/webquickstart.war', into: '/opt/tomcat/webapps/'
     }
   }
 }
