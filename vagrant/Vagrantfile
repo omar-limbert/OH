@@ -1,6 +1,6 @@
 require 'vagrant-openstack-provider'
 
-Vagrant.configure("2") do |config|
+Vagrant.configure('2') do |config|
   
   config.env.enable
   config.ssh.username = 'ubuntu'
@@ -18,17 +18,13 @@ Vagrant.configure("2") do |config|
   end
   
   config.vm.define 'linux-server-1' do |s| 
-    s.vm.provider :openstack do |os, override|
-      os.image        = ENV['OS_IMAGE'] 
-      os.server_name = ENV['OS_VM_NAME']
-      os.flavor = ENV['OS_FLAVOR'] 
-      override.vm.synced_folder '.', '/vagrant', disabled: true
-      end 
-  end
-  config.vm.provision "shell", path: "java8.sh"
-  config.vm.provision "shell", path: "tomcat8.sh"
 
-  config.vm.define 'linux-server-2' do |s| 
+    s.vm.provision :"docker"
+    s.vm.provision :"docker_compose", compose_version: '1.21.2'
+    s.vm.provision "file", source: "config_files/daemon.json", destination: "/tmp/daemon.json"
+    s.vm.provision "file", source: "config_files/docker-compose.yml", destination: "/tmp/docker-compose.yml"
+    s.vm.provision "shell", path: "config_files/docker_config.sh"
+
     s.vm.provider :openstack do |os, override|
       os.image        = ENV['OS_IMAGE'] 
       os.server_name = ENV['OS_VM_NAME2']
@@ -36,8 +32,18 @@ Vagrant.configure("2") do |config|
       override.vm.synced_folder '.', '/vagrant', disabled: true
       end 
   end
-  config.vm.provision "docker"
-  config.vm.provision "docker_compose", compose_version: "1.21.2"
+
+  config.vm.define 'linux-server-2' do |s| 
+    s.vm.provision "shell", path: "config_files/java8.sh"
+    s.vm.provision "file", source: "config_files/tomcat.config", destination: "/tmp/tomcat.service"
+    s.vm.provision "shell", path: "config_files/tomcat8.sh"
+
+    s.vm.provider :openstack do |os, override|
+      os.image        = ENV['OS_IMAGE'] 
+      os.server_name = ENV['OS_VM_NAME']
+      os.flavor = ENV['OS_FLAVOR'] 
+      override.vm.synced_folder '.', '/vagrant', disabled: true
+      end 
+  end
 
 end
-
