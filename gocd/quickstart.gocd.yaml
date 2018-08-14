@@ -33,15 +33,15 @@ pipelines:
                       - gradle/quickstart/
       - CodeQuality:
           jobs:
-            sonarqube: 
+            sonarqube:
               tasks:
                 - exec:
                     command: ./gradle/quickstart/gradlew
                     arguments:
                       - sonarqube
-                      - -Dsonar.host.url=http://127.0.0.1:9000
-                      - -p
-                      - gradle/quickstart/
+                      - -Dsonar.organization=omar-limbert-github
+                      - -Dsonar.host.url=https://sonarcloud.io
+                      - -Dsonar.login=f005f31e1cc80c26275d54f377b35595a4457f86
       - Publish:
           jobs:
             publishing: 
@@ -74,57 +74,46 @@ pipelines:
     group: WebJavaAPP
     materials:
       repo:
-       git: https://github.com/devops-at06/OH.git
-       branch: master
+        git: https://github.com/devops-at06/OH.git
+        branch: master
     stages:
       - Compile:
           jobs:
-            assemble:
+            Building:
               tasks:
                 - exec:
                     command: ./gradle/webquickstart/gradlew
                     arguments:
-                      - "clean"
-                      - "assemble"
-                      - "-p"
-                      - "gradle/webquickstart"
+                      - clean
+                      - assemble
+                      - -p
+                      - gradle/webquickstart/
+              artifacts:
+                - build:
+                    source: gradle/webquickstart/build/libs/*.war
+                    destination: war
       - Test:
           jobs:
-            unittests:
+            Unit_Test:
               tasks:
                 - exec:
                     command: ./gradle/webquickstart/gradlew
                     arguments:
-                      - test
-                      - "-p"
-                      - "gradle/webquickstart"
+                      - tests
+                      - -p
+                      - gradle/webquickstart/
               artifacts:
+                - build:
+                    source: gradle/webquickstart/build/reports/tests/test/**/*
+                    destination: html
                 - test:
-                    source: build/test-results/test/*xml
+                    source: gradle/webquickstart/build/test-results/test/*xml
                     destination: xml
-              artifacts:
-                - build:
-                    source: build/reports/tests/test/**/*
-                    destination: html_report
-              tabs:              
-                Test_Summary: html_report/index.html
-      - Publish:
-          jobs:
-            pucblishArtifact:
-              tasks:
-                - exec:
-                    command: ./gradle/webquickstart/gradlew
-                    arguments:
-                      - uploadArchives
-                      - "-p"
-                      - "gradle/webquickstart"
-              artifacts:
-                - build:
-                    source: repos/*.war
-                    destination: war  
+              tabs:
+                unit_test: html/index.html
       - Deploy:
           jobs:
-            deploying:
+            Application:
               tasks:
                 - exec:
                     command: ./gradle/webquickstart/gradlew
@@ -132,15 +121,11 @@ pipelines:
                       - -b
                       - deploy.gradle
                       - deploy
-                      - -Ddev_server=10.28.135.233
-                      - -Duser_server=ubuntu
-                      - -Dkey_path=C:\\Users\\Administrator\\Desktop\\omy.pem
-                      - -Dtomcat_webapps=/opt/tomcat/webapps
-                      - -Dwar_path=build/libs
-                      - -Dwar_name=webquickstart
+                      - -Pdev_server=10.28.135.233
+                      - -Puser_server=ubuntu
+                      - -Pkey_path={$HOME}/.ssh/authorized_keys
+                      - -Ptomcat_webapps=/opt/tomcat/webapps
+                      - -Pwar_path=build/libs
+                      - -Pwar_name=webquickstart
                       - -p
-                      - "gradle/webquickstart"
-              artifacts:
-                - build:
-                    source: repos/*.war
-                    destination: war       
+                      - gradle/webquickstart/
