@@ -1,0 +1,21 @@
+plugins {
+  id 'org.hidetake.ssh' version '2.9.0'
+}
+
+remotes {
+  webServer {
+    host = System.properties['host.ip']
+    user = System.properties['host.user']
+    identity = file(System.properties['key.path'])
+  }
+}
+
+task deploy {
+  doLast {
+    ssh.run {
+      session(remotes.webServer) {
+        put from: 'build/libs/webquickstart.war', into: '/opt/tomcat/webapps/'
+    }
+  }
+}
+}
