@@ -15,10 +15,10 @@ pipelines:
                 - exec:
                     command: ./gradle/quickstart/gradlew
                     arguments:
-                      - "clean"
-                      - "assemble"
-                      - "-p"
-                      - "gradle/quickstart"
+                      - clean
+                      - assemble
+                      - -p
+                      - gradle/quickstart
       - Test:
           jobs:
             testing: 
@@ -33,15 +33,15 @@ pipelines:
                       - gradle/quickstart/
       - CodeQuality:
           jobs:
-            sonarqube: 
+            sonarqube:
               tasks:
                 - exec:
                     command: ./gradle/quickstart/gradlew
                     arguments:
                       - sonarqube
-                      - -Dsonar.host.url=http://127.0.0.1:9000
-                      - -p
-                      - gradle/quickstart/
+                      - -Dsonar.organization=omar-limbert-github
+                      - -Dsonar.host.url=https://sonarcloud.io
+                      - -Dsonar.login=f005f31e1cc80c26275d54f377b35595a4457f86
       - Publish:
           jobs:
             publishing: 
@@ -68,3 +68,64 @@ pipelines:
               tabs:
                 Cod_Coverage: html_coverage/index.html
                 Test_Summary: html_report/index.html
+  
+  webquickstart-yaml-config:
+    lock_behavior: lockOnFailure
+    group: WebJavaAPP
+    materials:
+      repo:
+        git: https://github.com/devops-at06/OH.git
+        branch: master
+    stages:
+      - Compile:
+          jobs:
+            Building:
+              tasks:
+                - exec:
+                    command: ./gradle/webquickstart/gradlew
+                    arguments:
+                      - clean
+                      - assemble
+                      - -p
+                      - gradle/webquickstart/
+              artifacts:
+                - build:
+                    source: gradle/webquickstart/build/libs/*.war
+                    destination: war
+      - Test:
+          jobs:
+            Unit_Test:
+              tasks:
+                - exec:
+                    command: ./gradle/webquickstart/gradlew
+                    arguments:
+                      - tests
+                      - -p
+                      - gradle/webquickstart/
+              artifacts:
+                - build:
+                    source: gradle/webquickstart/build/reports/tests/test/**/*
+                    destination: html
+                - test:
+                    source: gradle/webquickstart/build/test-results/test/*xml
+                    destination: xml
+              tabs:
+                unit_test: html/index.html
+      - Deploy:
+          jobs:
+            Application:
+              tasks:
+                - exec:
+                    command: ./gradle/webquickstart/gradlew
+                    arguments:
+                      - -b
+                      - deploy.gradle
+                      - deploy
+                      - -Pdev_server=10.28.135.233
+                      - -Puser_server=ubuntu
+                      - -Pkey_path={$HOME}/.ssh/authorized_keys
+                      - -Ptomcat_webapps=/opt/tomcat/webapps
+                      - -Pwar_path=build/libs
+                      - -Pwar_name=webquickstart
+                      - -p
+                      - gradle/webquickstart/
