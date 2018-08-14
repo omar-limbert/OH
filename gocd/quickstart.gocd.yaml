@@ -15,10 +15,10 @@ pipelines:
                 - exec:
                     command: ./gradle/quickstart/gradlew
                     arguments:
-                      - "clean"
-                      - "assemble"
-                      - "-p"
-                      - "gradle/quickstart"
+                      - clean
+                      - assemble
+                      - -p
+                      - gradle/quickstart
       - Test:
           jobs:
             testing: 
