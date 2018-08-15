@@ -6,7 +6,7 @@ pipelines:
     materials:
       repo: 
        git: https://github.com/devops-at06/OH.git
-       branch: master
+       branch: deploying-webapp
     stages: 
       - Compile:
           jobs:
@@ -80,6 +80,19 @@ pipelines:
                 - build:
                     source: gradle/webquickstart/build/libs/*.war
                     destination: war      
+      - CodeQuality:
+          jobs:
+            sonarqube:
+              tasks:
+                - exec:
+                    command: ./gradle/webquickstart/gradlew
+                    arguments:
+                      - sonarqube
+                      - -Dsonar.organization=omar-limbert-github
+                      - -Dsonar.host.url=https://sonarcloud.io
+                      - -Dsonar.login=f005f31e1cc80c26275d54f377b35595a4457f86
+                      - -p 
+                      - gradle/webquickstart/
       - Deploy:
           jobs:
             Application:
@@ -98,7 +111,7 @@ pipelines:
                       - -Puser_server=ubuntu 
                       - -Pkey_path=/home/go/omy.pem 
                       - -Ptomcat_webapps=/opt/tomcat/webapps 
-                      - -Pwar_path=build/libs 
+                      - -Pwar_path=war 
                       - -Pwar_name=webquickstart  
                       - -p 
                       - gradle/webquickstart/
