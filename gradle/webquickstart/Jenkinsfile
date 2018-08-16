@@ -1,0 +1,34 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Compile') {
+            steps {
+                sh './gradle/webquickstart/gradlew clean assemble -p gradle/webquickstart/'
+            }
+        }
+        stage('Code Quality') {
+            steps {
+                sh './gradle/webquickstart/gradlew sonarqube -Dsonar.host.url=http://127.0.0.1:9000 -p gradle/webquickstart/'
+            }
+        }
+        stage('Publish') {
+            steps {
+                sh './gradle/webquickstart/gradlew uploadArchives -p gradle/webquickstart/'
+                
+            }
+        }
+    }
+        stage('Deploy') {
+            steps {
+                echo 'Deploy..'
+                sh'./webapp-quickstart/gradlew -b deploy.gradle deploy -Pkey_path=/home/omy.pem -Pdev_server=10.28.135.57 -Pwar_path=war -Pwar_name=webquickstart -p gradle/webquickstart/'
+            }
+        }          
+    }
+    post {
+        success {
+            archiveArtifacts artifacts: 'webapp-quickstart/build/libs/*.war', fingerprint: true
+        }
+    }
+}
